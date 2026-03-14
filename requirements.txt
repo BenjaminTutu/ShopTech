@@ -1,0 +1,8 @@
+python-dotenv
+flask-bootstrap
+Flask
+Flask-SQLAlchemy
+Flask-WTF
+Werkzeug
+Bootstrap_Flask==2.5.0
+email-validator
