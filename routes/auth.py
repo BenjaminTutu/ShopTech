@@ -73,12 +73,3 @@ def logout():
 
     return redirect(url_for('auth.home'))
 
-@auth.route('/admin')
-@login_required
-def admin():
-
-    return render_template('admin.html')
-
-
-'pbkdf2:sha256:1000000$ZuUZNlxZ$7f4490b22504d61146c34772d9af61fc5201aea768fb44d6bc43846831f9a45b'
-'pbkdf2:sha256:1000000$3DUbXzb1$1ef996ab855419a21d609d491abaea0863aabcb324988bcd633bfd11c7be2a92'

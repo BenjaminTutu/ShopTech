@@ -43,3 +43,5 @@ class ProductForm(FlaskForm):
     image = FileField("Product Image", render_kw={'placeholder': 'Product image'}, validators=[DataRequired()])
     submit = SubmitField("Add Product", render_kw={"class": "btn btn-primary"})
 
+class OrderForm(FlaskForm):
+    pass
