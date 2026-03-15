@@ -1,0 +1,16 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% extends 'base.html' %}
+
+{% block title %}
+Add Product
+{% endblock %}
+
+{% block body %}
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <!-- render login form here-->
+        {{ render_form(form, novalidate=True}}
+    </div>
+{% endblock %}
+
+
+

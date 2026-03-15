@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
+from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
 from extension import db
@@ -15,6 +16,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 db.init_app(app)
 
 Bootstrap5(app)
+
+migrate = Migrate(app, db)
+
+UPLOAD_FOLDER = "../static/images/products/"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # initializing login_manager
 login_manager = LoginManager()

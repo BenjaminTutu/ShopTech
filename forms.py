@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, IntegerField, FloatField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, length, Length
 
 
@@ -32,3 +32,14 @@ class CheckOutForm(FlaskForm):
     phone = StringField('Phone', render_kw={"placeholder": "Enter your phone number"},validators=[DataRequired()])
     email = StringField('Email', render_kw={"placeholder": "Enter your email"},validators=[DataRequired(), Email()])
     submit = SubmitField('Confirm Order', render_kw={"class": "btn btn-primary"})
+
+# AddProduct form for admin
+
+class ProductForm(FlaskForm):
+    name = StringField("Product Name", render_kw={'placeholder': 'Product name'}, validators=[DataRequired()])
+    price = FloatField("Price", render_kw={'placeholder': 'Product price'} ,validators=[DataRequired()])
+    stock = IntegerField("Stock", render_kw={'placeholder': 'Available stock'}, validators=[DataRequired()])
+    description = TextAreaField("Description", render_kw={'placeholder': 'Product description'})
+    image = FileField("Product Image", render_kw={'placeholder': 'Product image'}, validators=[DataRequired()])
+    submit = SubmitField("Add Product", render_kw={"class": "btn btn-primary"})
+
