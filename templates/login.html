@@ -11,15 +11,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     {% endblock %}
 
-    {% block title %}
     <title>TechLink Shop | LogIn</title>
-    {% endblock %}
+   
 </head>
 
 <body class="login-page">
 
     {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning" role="alert">
+    <div class="alert alert-warning" role="alert" style="text-align: center;">
         {{ message }}
     </div>
     {% endfor %}
@@ -31,8 +30,6 @@
         {{ render_form(form, novalidate=True) }}
     </div>
     {% endblock %}
-
-    {% include 'footer.html' %}
 
     {% block scripts %}
     {{ bootstrap.load_js() }}

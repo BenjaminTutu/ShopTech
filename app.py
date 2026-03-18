@@ -19,7 +19,8 @@ Bootstrap5(app)
 
 migrate = Migrate(app, db)
 
-UPLOAD_FOLDER = "../static/images/products/"
+# Configuring file path
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "images", "products")
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # initializing login_manager
@@ -33,9 +34,6 @@ def load_user(user_id):
 
 # Creating DB models
 from models import User, Product, Cart, CartItem, Order, OrderItem
-with app.app_context():
-     db.create_all()
-
 
 from  routes.auth import auth
 from routes.products import products

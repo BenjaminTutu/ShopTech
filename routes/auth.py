@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, flash, Blueprint
 from flask_login import login_user, login_required
 from sqlalchemy.exc import MultipleResultsFound
-from sqlalchemy.sql.functions import user
+from sqlalchemy.sql.functions import user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import LoginForm, RegisterForm
 from models import User
@@ -73,3 +73,9 @@ def logout():
 
     return redirect(url_for('auth.home'))
 
+# user profile server side
+@auth.route('/profile/<int:user_id>')
+@login_required
+def profile(user_id):
+    user = User.query.get(user_id)
+    return render_template('profile.html', user=user)

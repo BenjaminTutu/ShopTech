@@ -190,6 +190,7 @@ nav button:hover {
 .btn {
     background-color: #00bf63;
     color: #f4f4f4;
+    border: none;
 }
 .btn:hover{
     background-color: white;

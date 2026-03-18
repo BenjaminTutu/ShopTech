@@ -14,7 +14,6 @@
 
 </head>
 <body class="register-page">
-    {% include 'navbar.html' %}
 
     {% for message in get_flashed_messages() %}
     <div class="alert alert-warning" role="alert"> {{ message }} </div>
@@ -28,8 +27,6 @@
     </div>
     {% endblock %}
 
-
-    {% include 'footer.html' %}
 
     {% block scripts %}
     {{ bootstrap.load_js() }}

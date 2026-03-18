@@ -2,8 +2,8 @@ import os
 from functools import wraps
 from os import abort
 
-from flask import Flask, render_template, request, Blueprint, flash
-from flask_login import login_required, current_user
+from flask import render_template, Blueprint, flash, current_app
+from flask_login import  current_user
 from werkzeug.utils import secure_filename, redirect
 
 from forms import ProductForm
@@ -18,8 +18,11 @@ products = Blueprint('products', __name__)
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # must be logged in for access
         if not current_user.is_authenticated:
             abort(401)
+
+        #  must have an admin role in db
         if current_user.role != "admin":
             abort(403)
         return f(*args, **kwargs)
@@ -30,9 +33,8 @@ def admin_required(f):
 @products.route('/admin')
 @admin_required
 def admin():
-    results = db.session.execute(db.select(Product))
-    product = results.scalars().all()
-    return render_template('admin.html', products=product)
+
+    return render_template('admin.html')
 
 
 # view all products
@@ -53,14 +55,14 @@ def add_product():
         image_file = form.image.data
         filename = secure_filename(image_file.filename)
 
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
         image_file.save(image_path)
 
         product = Product(
             name=form.name.data,
             description=form.description.data,
             price=form.price.data,
-            image=image_path,
+            image=filename,
             stock=form.stock.data,
         )
         db.session.add(product)
@@ -85,44 +87,40 @@ def delete_product(product_id):
 @products.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
 @admin_required
 def edit_product(product_id):
-    form = ProductForm()
-
     # getting product by id
-    product_to_update = db.session.execute(db.session.get_or_404(Product, product_id))
+    product = db.get_or_404(Product, product_id)
 
-    # pre-populating form entry field with selected products delect
-    form.name.render_kw = {'placeholder': product_to_update.name}
-    form.description.render_kw = {'placeholder': product_to_update.description}
-    form.price.render_kw = {'placeholder': product_to_update.price}
-    form.stock.render_kw = {'placeholder': product_to_update.stock}
-
+    # pre-populating form entry field with selected products
+    form = ProductForm(obj=product)
 
     if form.validate_on_submit():
-        product_to_update.name = form.name.data
-        product_to_update.description = form.description.data
-        product_to_update.price = form.price.data
-        product_to_update.stock = form.stock.data
+        product.name = form.name.data
+        product.description = form.description.data
+        product.price = form.price.data
+        product.stock = form.stock.data
 
-        # saving image path
-        image_file = form.image.data
-        filename = secure_filename(image_file.filename)
+        # updating image if new image is uploaded, if not, saves product info without img
+        if form.image.data:
+            image_file = form.image.data
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_path)
 
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        image_file.save(image_path)
-        try:
-            product = Product.query.get(product_id)
-            product.name = form.name.data,
-            product.description = form.description.data,
-            product.price = form.price.data,
-            product.stock = form.stock.data,
-            product.image = image_path
-            db.session.add(product)
-            db.session.commit()
-            flash('Product successfully updated!', 'success')
-            return redirect('products.admin')
-        except Exception as e:
-            print(e)
-            flash('Product not updated.', 'danger')
+            product.image = filename
+
+            # saves product info to db if no error
+            try:
+                db.session.add(product)
+                db.session.commit()
+                flash('Product successfully updated!', 'success')
+                return redirect('products.admin')
+
+            # raises exception if there's error while committing to db
+            except Exception as e:
+                print(e)
+                flash('Product not updated.', 'danger')
+
+    return render_template('edit_product.html', form=form, product=product)
 
 
 

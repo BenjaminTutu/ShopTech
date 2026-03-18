@@ -1,15 +1,16 @@
-{% from "bootstrap5/form.html" import render_form %}
-{% extends 'base.html' %}
+{% extends 'base.html'%}
+{% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}
-Add Product
-{% endblock %}
 
-{% block body %}
-    <div class="col-lg-8 col-md-10 mx-auto">
-        <!-- render login form here-->
-        {{ render_form(form, novalidate=True}}
+{% block content %}
+        <!-- render add_product form here-->
+    <div class="container">
+        <h1>Add Product To Shop</h1>
+        <hr>
+         {{ render_form(form, novalidate=True)}}
+
     </div>
+       
 {% endblock %}
 
 
