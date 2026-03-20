@@ -188,9 +188,9 @@ nav button:hover {
     box-shadow: 0 0 5px rgba(0, 191, 99, 0.5);
 }
 .btn {
-    background-color: #00bf63;
-    color: #f4f4f4;
-    border: none;
+    background-color: #00bf63 !important;
+    color: #f4f4f4 !important;
+    border: none !important;
 }
 .btn:hover{
     background-color: white;

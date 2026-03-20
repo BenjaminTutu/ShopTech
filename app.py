@@ -36,11 +36,13 @@ def load_user(user_id):
 from models import User, Product, Cart, CartItem, Order, OrderItem
 
 from  routes.auth import auth
-from routes.products import products
+from routes.admin import admins
+from routes.cart import cart
 
 # connecting blueprints with app
 app.register_blueprint(auth, url_prefix='/')
-app.register_blueprint(products, url_prefix='/')
+app.register_blueprint(admins, url_prefix='/')
+app.register_blueprint(cart, url_prefix='/')
 
 
 

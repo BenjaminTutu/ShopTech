@@ -74,8 +74,12 @@ def logout():
     return redirect(url_for('auth.home'))
 
 # user profile server side
-@auth.route('/profile/<int:user_id>')
+@auth.route("/profile")
 @login_required
-def profile(user_id):
-    user = User.query.get(user_id)
-    return render_template('profile.html', user=user)
+def profile():
+    return render_template(
+        "profile.html",
+        user=current_user,
+        orders=current_user.orders,
+        cart=current_user.cart
+    )

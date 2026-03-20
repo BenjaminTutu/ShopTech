@@ -43,5 +43,13 @@ class ProductForm(FlaskForm):
     image = FileField("Product Image", render_kw={'placeholder': 'Product image'}, validators=[DataRequired()])
     submit = SubmitField("Add Product", render_kw={"class": "btn btn-primary"})
 
+class UpdateProductForm(FlaskForm):
+    name = StringField("Product Name", render_kw={'placeholder': 'Product name'}, validators=[DataRequired()])
+    price = FloatField("Price", render_kw={'placeholder': 'Product price'} ,validators=[DataRequired()])
+    stock = IntegerField("Stock", render_kw={'placeholder': 'Available stock'}, validators=[DataRequired()])
+    description = TextAreaField("Description", render_kw={'placeholder': 'Product description'})
+    image = FileField("Product Image", render_kw={'placeholder': 'Product image'}, validators=[DataRequired()])
+    submit = SubmitField("Update Product", render_kw={"class": "btn btn-primary"})
+
 class OrderForm(FlaskForm):
     pass

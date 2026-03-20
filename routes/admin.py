@@ -6,12 +6,12 @@ from flask import render_template, Blueprint, flash, current_app
 from flask_login import  current_user
 from werkzeug.utils import secure_filename, redirect
 
-from forms import ProductForm
+from forms import ProductForm, UpdateProductForm
 
-from models import Product
+from models import Product, User
 from extension import db
 
-products = Blueprint('products', __name__)
+admins = Blueprint('admins', __name__)
 
 
 # Admin decoration for only admin access to certain features
@@ -30,22 +30,15 @@ def admin_required(f):
 
 
 # Admin Dashboard Route
-@products.route('/admin')
+@admins.route('/admin')
 @admin_required
 def admin():
 
-    return render_template('admin.html')
+    return render_template('admin_dashboard.html')
 
-
-# view all products
-@products.route('/products_view')
-def products_view():
-    result = db.session.execute(db.select(Product))
-    product = result.scalars().all()
-    return render_template('products.html', products=product)
 
 # Add product route
-@products.route('/add_product', methods=['GET', 'POST'])
+@admins.route('/add_product', methods=['GET', 'POST'])
 @admin_required
 def add_product():
     form = ProductForm()
@@ -68,30 +61,30 @@ def add_product():
         db.session.add(product)
         db.session.commit()
         flash('Product successfully added!', 'success')
-        return redirect('products.admin')
+        return redirect('admins.admin')
 
     return render_template('add_product.html', form=form)
 
 # Product deletion route
-@products.route('/delete_product<int:product_id>')
+@admins.route('/delete_product<int:product_id>')
 @admin_required
 def delete_product(product_id):
-    product_to_delete = db.session.get_or_404(Product, product_id)
+    product_to_delete = db.get_or_404(Product, product_id)
     db.session.delete(product_to_delete)
     db.session.commit()
-    return redirect('products.admin')
+    return redirect('admins.admin')
 
 
 
 # edit products route
-@products.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
+@admins.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
 @admin_required
 def edit_product(product_id):
     # getting product by id
     product = db.get_or_404(Product, product_id)
 
     # pre-populating form entry field with selected products
-    form = ProductForm(obj=product)
+    form = UpdateProductForm(obj=product)
 
     if form.validate_on_submit():
         product.name = form.name.data
@@ -113,7 +106,7 @@ def edit_product(product_id):
                 db.session.add(product)
                 db.session.commit()
                 flash('Product successfully updated!', 'success')
-                return redirect('products.admin')
+                return redirect('admin')
 
             # raises exception if there's error while committing to db
             except Exception as e:
@@ -123,7 +116,39 @@ def edit_product(product_id):
     return render_template('edit_product.html', form=form, product=product)
 
 
+# Route for Shop Admin to view all products
+@admins.route('/shop_items')
+@admin_required
+def shop_items():
+    result = db.session.execute(db.select(Product))
+    product = result.scalars().all()
+    return render_template('shop_items.html', products=product)
 
+
+# Route for Shop Admin to view all customers details
+@admins.route('/view_all_customers')
+@admin_required
+def view_all_customers():
+    result = db.session.execute(db.select(User))
+    user = result.scalars().all()
+    return render_template('customers.html', user=user, cart=user.cart, orders=user.orders)
+
+
+
+#  fopr viewing a particular customer details
+@admins.route('/view_customer<int:user_id>', methods=['GET', 'POST'])
+@admin_required
+def view_customer(user_id):
+    result = db.get_or_404(User, user_id)
+    return render_template('profile.html', user=result)
+
+@admins.route('/delete_customer<int:user_id>', methods=['GET', 'POST'])
+@admin_required
+def delete_customer(user_id):
+    customer_to_delete = db.get_or_404(User, user_id)
+    db.session.delete(customer_to_delete)
+    db.session.commit()
+    return redirect('admins.admin')
 
 
 
