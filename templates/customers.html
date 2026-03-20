@@ -1,0 +1,45 @@
+{% block style %}
+{{ bootstrap.load_css() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h3 style="text-align: center; color: #00bf63; margin: 10px auto;">All Customers Details</h3>
+    <hr style="border: none; height: 5px; width: 80px; margin: 10px auto; background: #00bf63; margin-bottom: 20px;">
+
+
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in user %}
+            <tr>
+                <th scope="row">{{ user.id}}</th>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.phone}}</td>
+                <td>{{user.role}}</td>
+                <td><a class="btn" href="{{ url_for('admins.view_customer', user_id=user.id) }}">View Profile</a></td>
+                <td><a class="btn" href="{{ url_for('admins.delete_customer', user_id=user.id) }}">Delete Customer</a>
+                </td>
+            </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block script %}
+{{ bootstrap.load_js() }}
+{% endblock %}
