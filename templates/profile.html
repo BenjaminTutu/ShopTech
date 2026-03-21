@@ -95,7 +95,7 @@
         <!-- Profile Info -->
         <div class="card">
             <h3 style="color: #00bf63;">👤 Profile Info</h3>
-            <hr style="border: none; height: 5px; width: 80px; background: #00bf63; margin-bottom: 20px;">
+            <hr style="border: none; height: 7px; width: 80px; background: #00bf63; margin: auto 10px;">
             <p><strong>Name:</strong> {{ user.name }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Phone:</strong> {{ user.phone }}</p>
@@ -105,7 +105,7 @@
 
         <!-- Order History -->
         <div class="card">
-            <h3 style="text-align: center; color: #00bf63; margin: 10px auto;">📦 Order History</h3>
+            <h3 style=" color: #00bf63; ">📦 Order History</h3>
 
             {% for order in orders %}
                 <div class="item">
@@ -119,12 +119,12 @@
 
         <!-- Cart Preview -->
         <div class="card">
-            <h3>🛒 Current Cart</h3>
+            <h3 style=" color: #00bf63; ">🛒 Current Cart</h3>
 
             {% for item in cart.items %}
                 <div class="item">
-                    <span>{{ item.product.name }} x{{ item.quantity }}</span>
-                    <span>${{ item.product.price }}</span>
+                    <span>{{ product.product.name }} x{{ product.quantity }}</span>
+                    <span>${{ product.product.price }}</span>
                 </div>
             {% else %}
                 <p>Your cart is empty</p>

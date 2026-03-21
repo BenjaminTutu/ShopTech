@@ -55,13 +55,15 @@ def add_product():
             name=form.name.data,
             description=form.description.data,
             price=form.price.data,
+            previous_price=form.previous_price.data,
             image=filename,
             stock=form.stock.data,
+            rating=form.rating.data,
         )
         db.session.add(product)
         db.session.commit()
         flash('Product successfully added!', 'success')
-        return redirect('admins.admin')
+        return redirect('/admin')
 
     return render_template('add_product.html', form=form)
 
@@ -72,7 +74,7 @@ def delete_product(product_id):
     product_to_delete = db.get_or_404(Product, product_id)
     db.session.delete(product_to_delete)
     db.session.commit()
-    return redirect('admins.admin')
+    return redirect('/admin')
 
 
 
@@ -90,28 +92,40 @@ def edit_product(product_id):
         product.name = form.name.data
         product.description = form.description.data
         product.price = form.price.data
+        product.previous_price = form.previous_price.data
         product.stock = form.stock.data
+        product.rating = form.rating.data
 
         # updating image if new image is uploaded, if not, saves product info without img
-        if form.image.data:
-            image_file = form.image.data
+        image_file = form.image.data
+        if image_file and hasattr(image_file, 'filename') and image_file.filename != '':
+
+            # deleting existing image_file
+            old_path = os.path.join(current_app.config['UPLOAD_FOLDER'], product.image)
+            if os.path.exists(old_path):
+                os.remove(old_path)
+
+            # saving new image_file if exist
             filename = secure_filename(image_file.filename)
             image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             image_file.save(image_path)
 
-            product.image = filename
+        #     otherwise maintain old image
+        else:
+            filename = product.image
 
-            # saves product info to db if no error
-            try:
-                db.session.add(product)
-                db.session.commit()
-                flash('Product successfully updated!', 'success')
-                return redirect('admin')
+        product.image = filename
+        # saves product info to db if no error
+        try:
+            db.session.add(product)
+            db.session.commit()
+            flash('Product successfully updated!', 'success')
+            return redirect('/admin')
 
-            # raises exception if there's error while committing to db
-            except Exception as e:
-                print(e)
-                flash('Product not updated.', 'danger')
+        # raises exception if there's error while committing to db
+        except Exception as e:
+            print(e)
+            flash('Product not updated.', 'danger')
 
     return render_template('edit_product.html', form=form, product=product)
 
@@ -131,24 +145,25 @@ def shop_items():
 def view_all_customers():
     result = db.session.execute(db.select(User))
     user = result.scalars().all()
-    return render_template('customers.html', user=user, cart=user.cart, orders=user.orders)
+    return render_template('customers.html', user=user)
 
 
 
-#  fopr viewing a particular customer details
+#  for viewing a particular customer details including cart, oder history
 @admins.route('/view_customer<int:user_id>', methods=['GET', 'POST'])
 @admin_required
 def view_customer(user_id):
-    result = db.get_or_404(User, user_id)
-    return render_template('profile.html', user=result)
+    user = db.get_or_404(User, user_id)
+    return render_template('profile.html', user=user, cart=user.cart, orders=user.orders)
 
+# delete product
 @admins.route('/delete_customer<int:user_id>', methods=['GET', 'POST'])
 @admin_required
 def delete_customer(user_id):
     customer_to_delete = db.get_or_404(User, user_id)
     db.session.delete(customer_to_delete)
     db.session.commit()
-    return redirect('admins.admin')
+    return redirect('/admin')
 
 
 

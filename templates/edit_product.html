@@ -6,7 +6,7 @@
 <div class="container">
     <h1 style="color: #00bf63; text-align: center; margin-top: 20px; margin-bottom: 20px;">UPDATE PRODUCT</h1>
     <hr style="border: none; height: 5px; width: 80px; margin: 10px auto; background: #00bf63; margin-bottom: 20px;">
-    <form method="post">
+    <form method="POST" enctype="multipart/form-data">
         {{form.hidden_tag()}}
         {{ render_form(form, form_type="horizontal", horizontal_columns=('lg', 2, 5)) }}
     </form>

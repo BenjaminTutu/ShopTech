@@ -387,64 +387,7 @@ footer button:hover {
     color: #00bf63;
 }
 
-
-
-/* Products offer Styles */
-/* .gadgets-offers{
-    margin-left: 20px;
-    margin-right: 20px;
-}
-.carousel{
-    width: 100%;
-    overflow-x: auto;
-    margin: 3em auto;
-    display: flex;
-    gap: .8em;
-    scroll-behavior: smooth;
-    anchor-name: --carousel;
-    scroll-snap-type: x mandatory;
-}
-
-.gadgets-offers .card-car{
-    scroll-snap-align: start;
-    flex: 0 0 20em;
-    border-radius: 0.5em;
-    text-align: center;
-    align-content: center;
-}
-.gadgets-offers .card-car img{
-    width: 300px;
-    height: 200px;
-    border-radius: 15px;
-}
-.carousel::-webkit-scrollbar{
-    display: none;
-}
-.carousel::scroll-button(right), .carousel::scroll-button(left){
-    content: '→';
-    border: none;
-    background-color: #00bf63;
-    font-size: 2rem;
-    color: #eee;
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    padding-bottom: .1em;
-    cursor: pointer;
-    position: fixed;
-    position-anchor: --carousel;
-    position-area: right center;
-
-}
-.carousel::scroll-button(left){
-    content: '←';
-    position-area: left center;
-}
-.carousel::scroll-button(right):disabled, .carousel::scroll-button(left):disabled {
-    opacity: 0.5;
-    cursor: auto;
-} */
- .gadgets-offers{
+.gadgets-offers{
     margin: 20px;
  }
 
@@ -508,6 +451,83 @@ footer button:hover {
     transform:scale(1.1);
 }
 
+/* card styles */
+.container{
+    margin: 30px;
+}
+.card-grid{
+    display: flex;
+    gap: 1px;
+    grid-template-columns: repeat(auto-fill, minmax(250x, 1fr));
+}
+.card-grid a{
+    text-decoration: none;
+}
+
+.card{
+    width: 10rem;
+    height: 18rem;
+    padding: 5px;
+    display: flex;
+}
+.card:hover{
+    scale: calc(1.05);
+}
+ 
+.card-title{
+    color: gray;
+    font-size: 15px;
+}
+.ratings{
+    color: gold;
+    margin-bottom: 5px;
+}
+
+/* Product details styles */
+.product_detail{
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.p-col-1{
+    flex-basis: 1;
+    flex-direction: column;
+}
+.p-col-1 img{
+    height: 18rem;
+    width: 15rem;
+    border-radius: 1em;
+    margin-left: 20px;
+}
+.p-col-2{
+    flex-basis: 1;
+    padding-left: 1rem;
+}
+.prices{
+    display: flex;
+    gap: 20px;
+
+}
+.p-col-2 .description{
+    max-width: 450px;
+    text-align: left;
+    letter-spacing: 2px;
+    
+}
+.p-col-2 a{
+    width: 450px;
+}
+.p-price{
+    color: #555;
+    font-size: small;
+}
+.p-price strike{
+    color: red;
+}
+.c-price{
+    font-weight: bold;
+}
 
 /* smaller screen styles */
 @media(max-width: 600px){

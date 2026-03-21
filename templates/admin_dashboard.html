@@ -19,14 +19,16 @@
                             <th> Customers</th>
                             <th> Stock</th>
                             <th> Order</th>
+                            <th>Add Products</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <td><a class="btn" href="{{ url_for('admins.view_customers') }}">View Customer</a></td>
+                            <td><a class="btn" href="{{ url_for('admins.view_all_customers') }}">View Customers</a></td>
                             <td><a class="btn" href="{{ url_for('admins.shop_items') }}">View Shop Items</a></td>
                             <td><a href="#" class="btn">Order History</a></td>
+                            <td><a class="btn" href="{{ url_for('admins.add_product') }}"> Add Shop Items</a></td>
                         </tr>
                     </tbody>
                 </table>

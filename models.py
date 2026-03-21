@@ -28,8 +28,16 @@ class Product(db.Model):
     description: Mapped[str] = mapped_column(String(300))
     image: Mapped[str] = mapped_column(String(200))
     price: Mapped[float] = mapped_column(Float)
+
+    # adding new column to model for previous price using Flask-Migrate
+    previous_price: Mapped[float] = mapped_column(Float)
+
     stock: Mapped[int] = mapped_column(Integer)
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
+
+    # adding new column to model for ratings using Flask-Migrate
+    rating: Mapped[float] = mapped_column(Float)
+
 
     cart_items = relationship("CartItem", back_populates="product")
     order_items = relationship("OrderItem", back_populates="product")

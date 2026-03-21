@@ -28,7 +28,9 @@
       <th scope="col">Description</th>
       <th scope="col">Product Image</th>
       <th scope="col">Price</th>
+      <th scope="col">Previous Price</th>
       <th scope="col">Available Stock</th>
+      <th scope="col">Rating</th>
       <th scope="col">Date Added</th>
       <th scope="col">Admin Action</th>
     </tr>
@@ -41,7 +43,9 @@
       <td>{{product.description}}</td>
       <td><img src="{{ url_for('static', filename='images/products/'+ product.image) }}" width="100" style="border-radius: 15px;"></td>
       <td>Ghs {{product.price}}</td>
+      <td>Ghs {{product.previous_price}}</td>
       <td>{{product.stock}}</td>
+      <td>{{product.rating}}</td>
       <td>{{product.created_at}}</td>
       <td><a class="btn" href="{{ url_for('admins.edit_product', product_id=product.id) }}">Update</a></td>
       <td><a class="btn" href="{{ url_for('admins.delete_product', product_id=product.id) }}">Delete</a></td>

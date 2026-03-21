@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, IntegerField, FloatField, TextAreaField, FileField
-from wtforms.validators import DataRequired, Email, EqualTo, length
+from wtforms.validators import DataRequired, Email, EqualTo, length, NumberRange
 
 
 class RegisterForm(FlaskForm):
@@ -33,22 +33,41 @@ class CheckOutForm(FlaskForm):
     email = StringField('Email', render_kw={"placeholder": "Enter your email"},validators=[DataRequired(), Email()])
     submit = SubmitField('Confirm Order', render_kw={"class": "btn btn-primary"})
 
-# AddProduct form for admin
 
+# /add_product form
 class ProductForm(FlaskForm):
     name = StringField("Product Name", render_kw={'placeholder': 'Product name'}, validators=[DataRequired()])
     price = FloatField("Price", render_kw={'placeholder': 'Product price'} ,validators=[DataRequired()])
+
+    # adding migration previous_price change from db to Product form
+    previous_price = FloatField("Previous Price", render_kw={'placeholder': 'Previous price'}, validators=[DataRequired()])
+
     stock = IntegerField("Stock", render_kw={'placeholder': 'Available stock'}, validators=[DataRequired()])
     description = TextAreaField("Description", render_kw={'placeholder': 'Product description'})
     image = FileField("Product Image", render_kw={'placeholder': 'Product image'}, validators=[DataRequired()])
+
+    # adding Migration rating change from db to Product form
+    rating = FloatField("Rating", render_kw={'placeholder': 'Rating'}, validators=[NumberRange(min=0, max=5)])
+
     submit = SubmitField("Add Product", render_kw={"class": "btn btn-primary"})
 
+
+
+
+# /edit_product form
 class UpdateProductForm(FlaskForm):
     name = StringField("Product Name", render_kw={'placeholder': 'Product name'}, validators=[DataRequired()])
     price = FloatField("Price", render_kw={'placeholder': 'Product price'} ,validators=[DataRequired()])
+
+    # adding migration previous_price  chanage from db to Product form
+    previous_price = FloatField("Previous Price", render_kw={'placeholder': 'Previous price'},validators=[DataRequired()])
+
     stock = IntegerField("Stock", render_kw={'placeholder': 'Available stock'}, validators=[DataRequired()])
     description = TextAreaField("Description", render_kw={'placeholder': 'Product description'})
-    image = FileField("Product Image", render_kw={'placeholder': 'Product image'}, validators=[DataRequired()])
+    image = FileField("Product Image")
+
+    # adding  migration  rating change from db to Product form
+    rating = FloatField("Rating", render_kw={'placeholder': 'Rating'}, validators=[NumberRange(min=0, max=5)])
     submit = SubmitField("Update Product", render_kw={"class": "btn btn-primary"})
 
 class OrderForm(FlaskForm):

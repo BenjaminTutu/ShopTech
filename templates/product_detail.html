@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="product_detail">
+    <div class="p-col-1">
+        <img src="{{ url_for('static', filename='images/products/'+ product.image) }}" alt="{{product.name}}">
+        <div class="ratings" style="margin-top: 20px; margin-left: 2rem; padding: 0.5em;">
+            {% set full_stars = product.rating|int %}
+            {% set half_star = 1 if product.rating - full_stars >= 0.5 else 0 %}
+            {% set empty_stars = 5 - full_stars - half_star %}
+
+            {% for _ in range(full_stars) %}
+            <i class="bi bi-star-fill"></i>
+            {% endfor %}
+
+            {% if half_star %}
+            <i class="bi bi-star-half"></i>
+            {% endif %}
+
+            {% for _ in range(empty_stars) %}
+            <i class="bi bi-star">
+            {% endfor %}
+            <p></p>
+        </div>
+    </div>
+
+    <div class="p-col-2">
+        <p style="font-weight: bold; color: gray;">{{ product.name }}</p>
+        <hr>
+        <span>
+            <p style="font-size: 10px; color: gray;">In Stock: {{ product.stock }} pieces left</p>
+        </span>
+        <p class="description">{{product.description}}</p>
+        <div class="prices">
+            <div class="p-price">
+                <p>Before| <strike> {{product.previous_price}}</strike></p>
+            </div>
+
+            <div class="c-price">
+                <p><span style="color: #00bf63">Now </span>| GHS {{product.price}}</p>
+            </div>
+        </div>
+        <a href="#" class="btn">Add cart</a>
+    </div>
+
+</div>
+
+{% endblock %}

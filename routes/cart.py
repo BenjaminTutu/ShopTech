@@ -10,3 +10,18 @@ def view_all_products():
     result = db.session.execute(db.select(Product))
     product = result.scalars().all()
     return render_template('products.html', products=product)
+
+@cart.route('/product_detail/<product_id>')
+def product_detail(product_id):
+    product = db.get_or_404(Product, product_id)
+    return render_template('product_detail.html', product=product)
+
+
+
+
+
+
+
+
+
+

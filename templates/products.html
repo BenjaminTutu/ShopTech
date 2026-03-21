@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card-grid">
+        {% for product in products %}
+        <a href="{{url_for('cart.product_detail', product_id=product.id)}}">
+        <div class="card h-100">
+            <img src="{{ url_for('static', filename='images/products/'+ product.image) }}" class="card-img-top">
+            <div class="card-body">
+                <p class="card-title">{{ product.name }}</p>
+                <strong>
+                    <p class="card-text"> Ghs {{ product.price }} </p>
+                </strong>
+                <strike style="color: gray;"><small>
+                        <p style="color: gray;">{{product.previous_price}}</p>
+                    </small></strike>
+
+                <div class="ratings">
+                    {% set full_stars = product.rating|int %}
+                    {% set half_star = 1 if product.rating - full_stars >= 0.5 else 0 %}
+                    {% set empty_stars = 5 - full_stars - half_star %}
+
+                    {% for _ in range(full_stars) %}
+                    <i class="bi bi-star-fill"></i>
+                    {% endfor %}
+
+                    {% if half_star %}
+                     <i class="bi bi-star-half"></i>
+                    {% endif %}
+
+                    {% for _ in range(empty_stars) %}
+                    <i class="bi bi-star">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
