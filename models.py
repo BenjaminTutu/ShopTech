@@ -6,7 +6,7 @@ from extension import db
 
 
 # Define the User model
-class User(db.Model, UserMixin):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -71,6 +71,11 @@ class Order(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    # added total_price and status using Flask-Migrate
+    total_price: Mapped[float] = mapped_column(Float, default=0)
+    status: Mapped[int] = mapped_column(String, default='Pending')
+
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
 
     user = relationship("User", back_populates="orders")
@@ -86,6 +91,9 @@ class OrderItem(db.Model):
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
     quantity: Mapped[int] = mapped_column(Integer)
     price: Mapped[float] = mapped_column(Float)
+
+    # added timestamp using Flask-Migrate
+    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
 
     order = relationship("Order", back_populates="items")
     product = relationship("Product", back_populates="order_items")

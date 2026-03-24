@@ -20,11 +20,10 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         # must be logged in for access
         if not current_user.is_authenticated:
-            abort(401)
-
+            abort()
         #  must have an admin role in db
         if current_user.role != "admin":
-            abort(403)
+            abort()
         return f(*args, **kwargs)
     return decorated_function
 
@@ -74,6 +73,7 @@ def delete_product(product_id):
     product_to_delete = db.get_or_404(Product, product_id)
     db.session.delete(product_to_delete)
     db.session.commit()
+    flash("Item successfully deleted!", "success")
     return redirect('/admin')
 
 
@@ -150,19 +150,20 @@ def view_all_customers():
 
 
 #  for viewing a particular customer details including cart, oder history
-@admins.route('/view_customer<int:user_id>', methods=['GET', 'POST'])
+@admins.route('/view_customer/<int:user_id>', methods=['GET', 'POST'])
 @admin_required
 def view_customer(user_id):
     user = db.get_or_404(User, user_id)
     return render_template('profile.html', user=user, cart=user.cart, orders=user.orders)
 
 # delete product
-@admins.route('/delete_customer<int:user_id>', methods=['GET', 'POST'])
+@admins.route('/delete_customer/<int:user_id>', methods=['GET', 'POST'])
 @admin_required
 def delete_customer(user_id):
     customer_to_delete = db.get_or_404(User, user_id)
     db.session.delete(customer_to_delete)
     db.session.commit()
+    flash("Customer successfully deleted!", "success")
     return redirect('/admin')
 
 

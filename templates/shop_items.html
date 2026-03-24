@@ -15,6 +15,11 @@
 
 
 {% block content %}
+ {% for message in get_flashed_messages() %}
+    <div class="alert alert-success" role="alert" style="text-align: center;">
+        {{ message }}
+    </div>
+  {% endfor %}
 <div class="container">
     <h3 style="text-align: center; color: #00bf63; margin: 10px auto;">Edit Product</h3>
     <hr style="border: none; height: 5px; width: 80px; margin: 10px auto; background: #00bf63; margin-bottom: 20px;">

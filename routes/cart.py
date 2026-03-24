@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from models import Product
 from extension import db
 
@@ -11,13 +11,17 @@ def view_all_products():
     product = result.scalars().all()
     return render_template('products.html', products=product)
 
-@cart.route('/product_detail/<product_id>')
+@cart.route('/product_detail/<int:product_id>')
 def product_detail(product_id):
     product = db.get_or_404(Product, product_id)
     return render_template('product_detail.html', product=product)
 
 
-
+@cart.route('/add_cart/<int:product_id>', methods=['GET', 'POST'])
+def add_cart(product_id):
+    product = db.get_or_404(Product, product_id)
+    if request.method == 'POST':
+        pass
 
 
 

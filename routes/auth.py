@@ -1,7 +1,6 @@
 from flask import render_template, redirect, url_for, request, flash, Blueprint
-from flask_login import login_user, login_required
+from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.exc import MultipleResultsFound
-from sqlalchemy.sql.functions import user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import LoginForm, RegisterForm
 from models import User
@@ -69,14 +68,17 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    login_user(user, remember=False)
+    logout_user()
 
     return redirect(url_for('auth.home'))
 
-# user profile server side
+# For user to view profile
 @auth.route("/profile")
 @login_required
 def profile():
+    if not current_user.is_authenticated:
+        flash('You are not logged in', 'danger')
+        return redirect(url_for("auth.login"))
     return render_template(
         "profile.html",
         user=current_user,

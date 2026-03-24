@@ -3,6 +3,11 @@
 
 
 {%block content%}
+{% for message in get_flashed_messages() %}
+<div class="alert alert-success" role="alert" style="text-align: center;">
+    {{ message }}
+</div>
+{% endfor %}
 <div class="container">
     <h1 style="color: #00bf63; text-align: center; margin-top: 20px; margin-bottom: 20px;">UPDATE PRODUCT</h1>
     <hr style="border: none; height: 5px; width: 80px; margin: 10px auto; background: #00bf63; margin-bottom: 20px;">
