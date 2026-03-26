@@ -1,30 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% from 'bootstrap5/form.html' import render_form %}
-    {% block styles %}
-    {{ bootstrap.load_css() }}
-    <title>Cart - TechLink Shop</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    {% endblock %}
-</head>
-<body>
-    {% include 'base.html' %}
-    <h2>Cart</h2>
-    <hr>
-    {% block content %}
-    <div class="container cart-container d-flex justify-content-center align-items-center">
-        <p>Your cart is currently empty.</p>
-    </div>
-    {% endblock %}
+{% extend 'base.html' %}
 
-    {% block scripts %}
-    {{ bootstrap.load_js() }}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    {% endblock %}
-    
-</body>
-</html>
+{% block styles %}
+{{ bootstrap.load_css() }}
+<title>Cart - TechLink Shop</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<h2>Cart</h2>
+<hr>
+<div class="container cart-container d-flex justify-content-center align-items-center">
+    <p>Your cart is currently empty.</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ bootstrap.load_js() }}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
