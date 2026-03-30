@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap5
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
@@ -38,17 +38,41 @@ from models import User, Product, Cart, CartItem, Order, OrderItem
 from  routes.auth import auth
 from routes.admin import admins
 from routes.cart import cart
+from routes.orders import orders
 
 # connecting blueprints with app
 app.register_blueprint(auth, url_prefix='/')
 app.register_blueprint(admins, url_prefix='/')
 app.register_blueprint(cart, url_prefix='/')
+app.register_blueprint(orders, url_prefix='/')
 
 
+# create context processor for cart counts
+@app.context_processor
+def inject_cart_count():
+    if current_user.is_authenticated:
+        cart = Cart.query.filter_by(user_id=current_user.id).first()
 
+        if cart and cart.items:
+            count = sum(item.quantity for item in cart.items)
+        else:
+            count = 0
+    else:
+        count = 0
 
+    return dict(cart_count=count)
 
-
+# @app.context_processor
+# def inject_order_count():
+#     if current_user.is_authenticated:
+#         order = Order.query.filter_by(user_id=current_user.id).first()
+#         if order and order.items:
+#             count = sum(orders.item)
+#         else:
+#             count = 0
+#     else:
+#         count = 0
+#     return dict(order_count=count)
 
 
 

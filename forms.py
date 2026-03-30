@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, IntegerField, FloatField, TextAreaField, FileField
+from wtforms.fields.choices import SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, length, NumberRange
 
 
@@ -23,16 +24,6 @@ class ChangePasswordForm(FlaskForm):
     password2 = PasswordField('', render_kw={"placeholder": "Confirm your new password"}, validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Change Password', render_kw={"class": "btn btn-success"})
 
-class CheckOutForm(FlaskForm):
-    name = StringField('Name', render_kw={"placeholder": "Enter your name"}, validators=[DataRequired()])
-    address = StringField('Address', render_kw={"placeholder": "Enter your address"}, validators=[DataRequired()])
-    city = StringField('City', render_kw={"placeholder": "City"},validators=[DataRequired()])
-    postcode = StringField('Postcode', render_kw={"placeholder": "Postcode"},validators=[DataRequired()])
-    country = StringField('Country', render_kw={"placeholder": "Country"},validators=[DataRequired()])
-    phone = StringField('Phone', render_kw={"placeholder": "Enter your phone number"},validators=[DataRequired()])
-    email = StringField('Email', render_kw={"placeholder": "Enter your email"},validators=[DataRequired(), Email()])
-    submit = SubmitField('Confirm Order', render_kw={"class": "btn btn-primary"})
-
 
 # /add_product form
 class ProductForm(FlaskForm):
@@ -52,8 +43,6 @@ class ProductForm(FlaskForm):
     submit = SubmitField("Add Product", render_kw={"class": "btn btn-primary"})
 
 
-
-
 # /edit_product form
 class UpdateProductForm(FlaskForm):
     name = StringField("Product Name", render_kw={'placeholder': 'Product name'}, validators=[DataRequired()])
@@ -70,5 +59,16 @@ class UpdateProductForm(FlaskForm):
     rating = FloatField("Rating", render_kw={'placeholder': 'Rating'}, validators=[NumberRange(min=0, max=5)])
     submit = SubmitField("Update Product", render_kw={"class": "btn btn-primary"})
 
-class OrderForm(FlaskForm):
-    pass
+
+class CheckOutForm(FlaskForm):
+    name = StringField("Full Name", render_kw={'placeholder': 'Full name'}, validators=[DataRequired()])
+    address = StringField('Address', render_kw={"placeholder": "Enter your address"}, validators=[DataRequired()])
+    phone = StringField('Phone', render_kw={"placeholder": "Enter your phone number"},validators=[DataRequired()])
+    submit = SubmitField('Confirm Order', render_kw={"class": "btn btn-primary"})
+
+class OrderStatus(FlaskForm):
+    status = SelectField("Order Status", choices=[('Pending', 'Pending'),
+                                                  ('Packed for Delivery', 'Packaged for Delivery'),
+                                                  ('Shipped', 'Shipped'),
+                                                  ('Delivered', 'Delivered')], validators=[DataRequired()])
+    submit = SubmitField('Update Status', render_kw={"class": "btn btn-primary"})

@@ -1,0 +1,25 @@
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block style %}
+{{ bootstrap.load_css() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-warning" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="container mt-3">
+<form method="POST" action="/update_order">
+    {{ form.hidden_tag() }}
+    {{render_form(form, novalidate=True)}}
+</form>
+</div>
+{% endblock %}

@@ -6,9 +6,9 @@ from flask import render_template, Blueprint, flash, current_app
 from flask_login import  current_user
 from werkzeug.utils import secure_filename, redirect
 
-from forms import ProductForm, UpdateProductForm
+from forms import ProductForm, UpdateProductForm, OrderStatus
 
-from models import Product, User
+from models import Product, User, Order
 from extension import db
 
 admins = Blueprint('admins', __name__)
@@ -166,7 +166,26 @@ def delete_customer(user_id):
     flash("Customer successfully deleted!", "success")
     return redirect('/admin')
 
+@admins.route('/view_all_orders')
+@admin_required
+def view_all_orders():
+    result = db.session.execute(db.select(Order))
+    order = result.scalars().all()
+    return render_template('orders.html', order=order)
 
+@admins.route('/update_order/<int:order_id>', methods=['GET', 'POST'])
+@admin_required
+def update_order(order_id):
+    order = db.get_or_404(Order, order_id)
+
+    form = OrderStatus()
+    if form.validate_on_submit():
+        order.status = form.status.data
+        db.session.add(order)
+        db.session.commit()
+        flash('Order successfully updated!', 'success')
+        return redirect('/admin')
+    return render_template('update_order.html', order=order, form=form)
 
 
 

@@ -76,6 +76,11 @@ class Order(db.Model):
     total_price: Mapped[float] = mapped_column(Float, default=0)
     status: Mapped[int] = mapped_column(String, default='Pending')
 
+    #added more columns using Flask Migrate
+    address: Mapped[str] = mapped_column(String, default='')
+    phone: Mapped[str] = mapped_column(String, default='')
+    name: Mapped[str] = mapped_column(String, default='')
+
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
 
     user = relationship("User", back_populates="orders")

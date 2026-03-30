@@ -105,8 +105,7 @@ input.form-control:focus{
     backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 8px;
-    width: 100%;
-    max-width: 400px;
+    width: 350px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #00bf63;
 }
@@ -173,7 +172,7 @@ nav button:hover {
     backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 8px;
-    width: 100%;
+    width: 350px;
     max-width: 400px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #00bf63;
@@ -301,11 +300,11 @@ footer button:hover {
 .hero-row{
     display: flex;
     gap: 30px;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 .side-bar{
     flex: 0 0 20%;
-    margin-left: auto;
+    /* margin-left: auto; */
 }
 .main{
     flex: 0 0 75%;
@@ -370,7 +369,7 @@ footer button:hover {
     line-height: 1.6;
 }
 .main-img img{
-    max-width: 400px;
+    max-width: 350px;
 }
 .hero-btn{
     background: #00bf63;
@@ -465,6 +464,9 @@ footer button:hover {
 .card-grid a{
     text-decoration: none;
 }
+.card-text{
+    color: #00bf63;
+}
 
 .card{
     width: 10rem;
@@ -534,7 +536,12 @@ footer button:hover {
 .c-price{
     font-weight: bold;
 }
-
+.confirm-row{
+    display: flex;
+}
+.confirm-row-1{
+    display: flex;
+}
 /* smaller screen styles */
 @media(max-width: 600px){
     .main{

@@ -123,9 +123,10 @@
 
             {% for item in cart.items %}
                 <div class="item">
-                    <span>{{ product.product.name }} x{{ product.quantity }}</span>
-                    <span>${{ product.product.price }}</span>
+                    <span>{{ item.product.name }}  ✖️  {{ item.quantity }}</span>
+                    <span>Ghs r{{ item.product.price }}</span>
                 </div>
+                <hr>
             {% else %}
                 <p>Your cart is empty</p>
             {% endfor %}

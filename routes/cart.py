@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from models import Product, Cart, CartItem, Order, OrderItem
 from extension import db
@@ -12,6 +12,13 @@ def view_all_products():
     product = result.scalars().all()
     return render_template('products.html', products=product)
 
+@cart.route('/search', methods=['GET', 'POST'])
+def search():
+    pass
+
+
+
+
 # view products detail
 @cart.route('/product_detail/<int:product_id>')
 def product_detail(product_id):
@@ -20,9 +27,10 @@ def product_detail(product_id):
 
 # add to cart route
 @cart.route('/add_cart/<int:product_id>', methods=['GET', 'POST'])
+@login_required
 def add_cart(product_id):
     # check if user already have cart
-    cart = db.session.execute(db.select(Cart).where(Cart.user_id==current_user.id)).first()
+    cart = db.session.execute(db.select(Cart).where(Cart.user_id==current_user.id)).scalar()
 
     # if user does not have we create cart
     if not cart:
@@ -31,82 +39,81 @@ def add_cart(product_id):
         db.session.commit()
 
         #  check if product/item already exist in cart
-        cart_item = db.session.execute(db.select(CartItem).where(
-            CartItem.product_id==product_id,
-            CartItem.cart_id==cart.id)).first()
-        if cart_item:
-            #increase quantity
-            cart_item.quantity += 1
-            db
-        else:
-            cart_item = CartItem(
-                cart_id=cart.id,
-                product_id=product_id,
-                quantity=1,
-            )
-        db.session.commit()
-        flash(f'{product_id.name} added to cart.', 'success')
-
-# remove cart_item
-@cart.route('/remove_cart/<int:product_id>', methods=['GET', 'POST'])
-def remove_cart(product_id):
-    try:
-        cart_item = db.session.execute(db.select(CartItem).where(CartItem.product_id==product_id)).first()
-        if cart_item:
-            db.session.delete(cart_item)
-            db.session.commit()
-            flash(f'{product_id.name} removed from cart.', 'success')
-    except Exception as err:
-        db.session.rollback()
-        flash(f'{err}', 'danger')
-
-
-# checkout route
-@cart.route('/checkout', methods=['GET', 'POST'])
-def checkout():
-    try:
-        cart = db.session.execute(db.select(Cart).where(Cart.user_id==current_user.id)).first()
-        if not cart:
-            flash(f'{current_user.id} has no cart.', 'danger')
-            return redirect('/cart')
-
-        # create new order
-        order = Order(
-            user_id=current_user.id,
-            total_price=cart.total_price,
-            status='status'
+    cart_item = db.session.execute(db.select(CartItem).where(
+        CartItem.product_id==product_id,
+        CartItem.cart_id==cart.id)).scalar()
+    if cart_item:
+        #increase quantity
+        cart_item.quantity += 1
+    else:
+        cart_item = CartItem(
+            cart_id=cart.id,
+            product_id=product_id,
+            quantity=1,
         )
-        db.session.add(order)
+        db.session.add(cart_item)
+
+    db.session.commit()
+    flash(f'{cart_item.product.name} added to cart.', 'success')
+    return redirect('/cart')
+
+@cart.route("/cart")
+@login_required
+def view_cart():
+
+    # Get user's cart
+    cart = db.session.execute(
+        db.select(Cart).where(Cart.user_id == current_user.id)
+    ).scalar()
+
+    if not cart or not cart.items:
+        return render_template("cart.html", cart=None, total=0)
+
+    total = 0
+
+    # Calculate total
+    for item in cart.items:
+        total += item.quantity * item.product.price
+
+    return render_template("cart.html", cart=cart, total=total)
+
+@cart.route('/remove_item/<int:item_id>', methods=['GET','POST'])
+@login_required
+def remove_item(item_id):
+    try:
+        # Get user's cart
+        cart = Cart.query.filter_by(user_id=current_user.id).first()
+
+        if not cart:
+            flash("Cart not found", "danger")
+            return redirect(url_for('cart.view_cart'))
+
+        # Get item safely (belonging to this cart)
+        item_to_remove = CartItem.query.filter_by(
+            id=item_id,
+            cart_id=cart.id
+        ).first()
+
+        if not item_to_remove:
+            flash("Item not found", "danger")
+            return redirect(url_for('cart.view_cart'))
+
+        # Store name BEFORE delete
+        product_name = item_to_remove.product.name
+
+        # Delete
+        db.session.delete(item_to_remove)
         db.session.commit()
 
-        total = 0
-
-#         cart_items to order_items
-        for item in cart.items:
-            product = item.product
-            order_item = OrderItem(
-                order_id=order.id,
-                product_id=product.id,
-                quantity=item.quantity,
-                price=product.price
-            )
-
-            total += item.quantity * product.price
-            db.session.add(order_item)
-
-        order.total_price = total
-        db.session.commit()
-
-        db.session.execute(db.delete(CartItem).where(CartItem.cart_id==cart.id))
-        db.session.commit()
-
-        flash('Your order has been placed.', 'success')
-        return redirect('/orders')
-
+        flash(f'{product_name} removed from cart.', 'success')
 
     except Exception as err:
         print(err)
         db.session.rollback()
+        flash('Item not removed from cart', 'danger')
+
+    return redirect(url_for('cart.view_cart'))
+
 
 
 
