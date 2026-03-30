@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-warning" role="alert">{{message}}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="confirm-container">
+    <h1 style="color:#00bf63;">Confirm Order</h1>
+    <hr style="color:#00bf63;">
+        {% for item in cart.items %}
+        <div class="confirm-row-1" style="background:white; padding:10px; border-radius:10px;  box-shadow: 0 0 10px rgba(0,0,0,0.05); margin:10px;">
+            <div class="con-image">
+                <img src="{{url_for('static', filename='images/products/' + item.product.image)}}" alt="" width="100px">
+            </div>
+            <div class="con-details">
+                <p style="max-width: 450px; font-size: xx-small; margin: 10px;">{{item.product.description}}</p>
+                <h5 style="color: #00bf63; font-weight: bold; margin: 10px;">{{item.product.price}}</h5>
+                <p style="color: #00bf63; font-weight: small; margin: 10px;">{{item.quantity}} piece(s)</p>
+            </div>
+        </div>
+        {% endfor %}
+        <h2>Total: {{ total }}</h2>
+        <hr style="color:#00bf63;">
+        <div class="confirm-row-2">
+            <strong>
+                <p>Enter Shipping Details</p>
+            </strong>
+            <form action="{{url_for('orders.checkout')}}" method="post">
+                {{csrf_token}}
+                {{ render_form(form, novalidate=True) }}
+            </form>
+        </div>
+
+</div>
+
+
+
+{% endblock %}
