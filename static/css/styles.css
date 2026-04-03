@@ -542,6 +542,17 @@ footer button:hover {
 .confirm-row-1{
     display: flex;
 }
+.order-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.order-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+}
 /* smaller screen styles */
 @media(max-width: 600px){
     .main{

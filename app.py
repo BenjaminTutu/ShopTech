@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
 from extension import db
+from flask_mail import Mail
 
 
 load_dotenv()
@@ -18,6 +19,16 @@ db.init_app(app)
 Bootstrap5(app)
 
 migrate = Migrate(app, db)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = os.getenv('EMAIL')
+app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('EMAIL')
+
+mail = Mail(app)
 
 # Configuring file path
 UPLOAD_FOLDER = os.path.join(app.root_path, "static", "images", "products")
@@ -33,7 +44,7 @@ def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 # Creating DB models
-from models import User, Product, Cart, CartItem, Order, OrderItem
+from models import User, Cart
 
 from  routes.auth import auth
 from routes.admin import admins

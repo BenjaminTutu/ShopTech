@@ -123,8 +123,9 @@
 
             {% for item in cart.items %}
                 <div class="item">
+                    <span><img src="{{ url_for('static', filename='images/products/' + item.product.image) }}" alt="" width="50px"></span>
                     <span>{{ item.product.name }}  ✖️  {{ item.quantity }}</span>
-                    <span>Ghs r{{ item.product.price }}</span>
+                    <span>Ghs {{ item.product.price }}</span>
                 </div>
                 <hr>
             {% else %}

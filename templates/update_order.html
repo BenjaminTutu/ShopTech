@@ -17,9 +17,7 @@
 {% endif %}
 {% endwith %}
 <div class="container mt-3">
-<form method="POST" action="/update_order">
     {{ form.hidden_tag() }}
     {{render_form(form, novalidate=True)}}
-</form>
 </div>
 {% endblock %}

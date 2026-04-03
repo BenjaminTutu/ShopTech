@@ -68,7 +68,8 @@ class CheckOutForm(FlaskForm):
 
 class OrderStatus(FlaskForm):
     status = SelectField("Order Status", choices=[('Pending', 'Pending'),
-                                                  ('Packed for Delivery', 'Packaged for Delivery'),
+                                                  ('Processing', 'Processing'),
                                                   ('Shipped', 'Shipped'),
+                                                  ('Cancelled', 'Cancelled'),
                                                   ('Delivered', 'Delivered')], validators=[DataRequired()])
     submit = SubmitField('Update Status', render_kw={"class": "btn btn-primary"})
