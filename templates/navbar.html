@@ -25,13 +25,19 @@
             <a class="nav-link active" aria-current="page" href="{{ url_for('cart.view_all_products') }}">Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-disabled="false">About Us</a>
+            <a class="nav-link" aria-disabled="false" href="{{ url_for('auth.about') }}">About Us</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        <form action="{{ url_for('cart.search') }}" method="GET" class="d-flex">
+    <input 
+        type="text" 
+        name="q" 
+        class="form-control me-2" 
+        placeholder="Search products..."
+        required
+    >
+    <button class="btn btn-outline-light">Search</button>
+</form>
         <a class="cart-icon position-relative" href="{{ url_for('cart.view_cart') }}">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-bag"
             viewBox="0 0 16 16">
@@ -54,6 +60,7 @@
             <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Logout</a></li>
             {% else %}
             <li><a class="dropdown-item" href="{{url_for('auth.login')}}">Login</a></li>
+            <li><a class="dropdown-item" href="{{url_for('auth.register')}}">Register</a></li>
             {% endif %}
           </ul>
         </li>

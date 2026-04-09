@@ -3,14 +3,16 @@ from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.exc import MultipleResultsFound
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import LoginForm, RegisterForm
-from models import User
+from models import User, Product
 from extension import db
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/')
 def home():
-    return render_template('index.html')
+    products = db.session.execute(db.select(Product))
+    products=products.scalars().all()
+    return render_template('index.html', products=products)
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -85,3 +87,6 @@ def profile():
         orders=current_user.orders,
         cart=current_user.cart
     )
+@auth.route("/about")
+def about():
+    return render_template("about.html")

@@ -1,3 +1,4 @@
+from dns.e164 import query
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from models import Product, Cart, CartItem, Order, OrderItem
@@ -12,9 +13,22 @@ def view_all_products():
     product = result.scalars().all()
     return render_template('products.html', products=product)
 
-@cart.route('/search', methods=['GET', 'POST'])
+@cart.route('/search')
 def search():
-    pass
+    query = request.args.get('q')
+
+    if not query:
+        products = []
+    else:
+        products = Product.query.filter(
+            Product.name.ilike(f"%{query}%")
+        ).all()
+
+    return render_template(
+        'search.html',
+        products=products,
+        query=query
+    )
 
 
 

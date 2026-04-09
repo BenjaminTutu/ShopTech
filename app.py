@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 from extension import db
 from flask_mail import Mail
 
-
 load_dotenv()
 
 app = Flask(__name__)

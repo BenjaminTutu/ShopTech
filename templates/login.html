@@ -20,11 +20,17 @@
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-warning" role="alert">{{message}}</div>
+    <div class="alert alert-danger" role="alert">{{message}}</div>
     {% endfor %}
     {% endif %}
     {% endwith %}
 
+    <h1 
+    style="background: white; 
+    font-weight: bolder; margin-bottom: 20px; 
+    margin-top: 40px; padding: 10px; text-align: center;
+    width: 300px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+    Shop<span style="color: #00bf63;">Tech</span></h1>
     <h2>Login</h2>
     <hr>
     {% block content %}

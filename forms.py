@@ -68,6 +68,7 @@ class CheckOutForm(FlaskForm):
 
 class OrderStatus(FlaskForm):
     status = SelectField("Order Status", choices=[('Pending', 'Pending'),
+                                                  ('Paid', 'Paid'),
                                                   ('Processing', 'Processing'),
                                                   ('Shipped', 'Shipped'),
                                                   ('Cancelled', 'Cancelled'),

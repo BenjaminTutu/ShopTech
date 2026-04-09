@@ -77,9 +77,10 @@ class Order(db.Model):
     status: Mapped[int] = mapped_column(String, default='Pending')
 
     #added more columns using Flask Migrate
-    address: Mapped[str] = mapped_column(String, default='')
-    phone: Mapped[str] = mapped_column(String, default='')
-    name: Mapped[str] = mapped_column(String, default='')
+    address: Mapped[str] = mapped_column(String, nullable=True)
+    phone: Mapped[str] = mapped_column(String, nullable=True)
+    name: Mapped[str] = mapped_column(String, nullable=True)
+    payment_reference: Mapped[str] = mapped_column(String(200), nullable=True)
 
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
 

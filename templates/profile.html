@@ -83,9 +83,9 @@
     <div class="sidebar">
         <h2>My Account</h2>
 
-        <a href="#">Profile</a>
-        <a href="#">Orders</a>
-        <a href="#">Cart</a>
+        <a href="{{ url_for('auth.profile') }}">Profile</a>
+        <a href="{{ url_for('orders.view_orders') }}">Orders</a>
+        <a href="{{ url_for('cart.view_cart') }}">Cart</a>
         <a href="/logout">Logout</a>
     </div>
 

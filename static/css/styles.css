@@ -449,6 +449,33 @@ footer button:hover {
 .offer-card:hover img{
     transform:scale(1.1);
 }
+.featured-products{
+    margin: 20px;
+}
+.featured-products h2{
+    text-align: center;
+    color: #00bf63;
+    margin-top: 20px;
+    font-weight: 600;
+    
+}
+.featured-products hr{
+    border:none; 
+    height: 5px;
+    background: #00bf63;
+    width: 80px;
+    margin: 20px auto;
+}
+.f-products-container{
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+.f-products-container a{
+    text-decoration: none;
+    color: #333;
+}
 
 /* card styles */
 .container{
@@ -473,6 +500,12 @@ footer button:hover {
     height: 18rem;
     padding: 5px;
     transition: 0.3s ease;
+}
+.card img{
+    width: 100%;
+    height: 10rem;
+    object-fit: cover;
+    border-radius: 8px;
 }
 .card:hover{
     /* scale: calc(1.05); */
