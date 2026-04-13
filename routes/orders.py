@@ -52,6 +52,8 @@ def checkout():
             order_item = OrderItem(
                 order_id=order.id,
                 product_id=item.product_id,
+                product_name=product.name,
+                product_image=product.image,
                 quantity=item.quantity,
                 price=item.product.price,
             )
@@ -86,9 +88,12 @@ def checkout():
         Hello {order.name}!
         Your order #{order.id} has been created.
         Total: {order.total_price}.
+        Payment Reference: {order.payment_reference}.
         Please go ahead and make payment for delivery.
         -------
         Thank you for shopping with ShopTech
+        Contact Us: 012101910
+        Email: shoptech.info@email.com
         -------
         """
         try:
@@ -165,7 +170,7 @@ def pay(order_id):
 @login_required
 def verify_payment():
     reference = request.args.get('reference')
-    print("Reference from WHK",reference)
+    print("Reference from WHK: ",reference)
 
     order = Order.query.filter_by(payment_reference=reference).first()
     if order is None:

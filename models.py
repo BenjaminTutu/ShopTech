@@ -1,6 +1,6 @@
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from flask_login import UserMixin
-from sqlalchemy import Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import Integer, String, Float, DateTime, ForeignKey, Text
 import datetime
 from extension import db
 
@@ -10,56 +10,82 @@ class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100))
-    email: Mapped[str] = mapped_column(String(120), unique=True)
-    password: Mapped[str] = mapped_column(String(200))
-    phone: Mapped[str] = mapped_column(String(20))
-    role: Mapped[str] = mapped_column(String(20), default='user', nullable=False)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(String(200), nullable=False)
+    phone: Mapped[str] = mapped_column(String(20), nullable=True)
+    role: Mapped[str] = mapped_column(String(20), default="user", nullable=False)
 
-    cart = relationship("Cart", back_populates="user", uselist=False)
-    orders = relationship("Order", back_populates="user")
+    cart = relationship(
+        "Cart",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
 
+    orders = relationship(
+        "Order",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 # Products model
 class Product(db.Model):
     __tablename__ = "products"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(150))
-    description: Mapped[str] = mapped_column(String(300))
-    image: Mapped[str] = mapped_column(String(200))
-    price: Mapped[float] = mapped_column(Float)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    image: Mapped[str] = mapped_column(String(255), nullable=True)
 
-    # adding new column to model for previous price using Flask-Migrate
-    previous_price: Mapped[float] = mapped_column(Float)
+    price: Mapped[float] = mapped_column(Float, nullable=False)
+    previous_price: Mapped[float] = mapped_column(Float, nullable=True)
 
-    stock: Mapped[int] = mapped_column(Integer)
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
+    stock: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    rating: Mapped[float] = mapped_column(Float, nullable=True, default=0.0)
 
-    # adding new column to model for ratings using Flask-Migrate
-    rating: Mapped[float] = mapped_column(Float)
-
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime,
+        default=datetime.datetime.utcnow
+    )
 
     cart_items = relationship("CartItem", back_populates="product")
     order_items = relationship("OrderItem", back_populates="product")
+
 
 # cart model
 class Cart(db.Model):
     __tablename__ = "carts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", name="fk_carts_user_id"),
+        unique=True
+    )
 
     user = relationship("User", back_populates="cart")
-    items = relationship("CartItem", back_populates="cart")
+
+    items = relationship(
+        "CartItem",
+        back_populates="cart",
+        cascade="all, delete-orphan"
+    )
 
 # Model for  cart_items
 class CartItem(db.Model):
     __tablename__ = "cart_items"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"))
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
-    quantity: Mapped[int] = mapped_column(Integer)
+
+    cart_id: Mapped[int] = mapped_column(
+        ForeignKey("carts.id", name="fk_cart_items_cart_id")
+    )
+
+    product_id: Mapped[int] = mapped_column(
+        ForeignKey("products.id", name="fk_cart_items_product_id")
+    )
+
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     cart = relationship("Cart", back_populates="items")
     product = relationship("Product", back_populates="cart_items")
@@ -70,22 +96,37 @@ class Order(db.Model):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    # added total_price and status using Flask-Migrate
-    total_price: Mapped[float] = mapped_column(Float, default=0)
-    status: Mapped[int] = mapped_column(String, default='Pending')
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", name="fk_orders_user_id")
+    )
 
-    #added more columns using Flask Migrate
-    address: Mapped[str] = mapped_column(String, nullable=True)
-    phone: Mapped[str] = mapped_column(String, nullable=True)
-    name: Mapped[str] = mapped_column(String, nullable=True)
+    total_price: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+
+    status: Mapped[str] = mapped_column(
+        String(20),
+        default="PENDING",
+        nullable=False
+    )
+
+    address: Mapped[str] = mapped_column(String(255), nullable=True)
+    phone: Mapped[str] = mapped_column(String(20), nullable=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=True)
+
     payment_reference: Mapped[str] = mapped_column(String(200), nullable=True)
 
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime,
+        default=datetime.datetime.utcnow
+    )
 
     user = relationship("User", back_populates="orders")
-    items = relationship("OrderItem", back_populates="order")
+
+    items = relationship(
+        "OrderItem",
+        back_populates="order",
+        cascade="all, delete-orphan"
+    )
 
 
 # Model for OrderItems
@@ -93,16 +134,38 @@ class OrderItem(db.Model):
     __tablename__ = "order_items"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"))
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
-    quantity: Mapped[int] = mapped_column(Integer)
-    price: Mapped[float] = mapped_column(Float)
 
-    # added timestamp using Flask-Migrate
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
+    order_id: Mapped[int] = mapped_column(
+        ForeignKey("orders.id", name="fk_order_items_order_id")
+    )
+
+    product_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "products.id",
+            name="fk_order_items_product_id",
+            ondelete="SET NULL"
+        ),
+        nullable=True
+    )
+
+    product_name: Mapped[str] = mapped_column(String(150), nullable=False)
+    product_image = mapped_column(String(255), nullable=True)
+
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    price: Mapped[float] = mapped_column(Float, nullable=False)
+
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime,
+        default=datetime.datetime.utcnow
+    )
 
     order = relationship("Order", back_populates="items")
-    product = relationship("Product", back_populates="order_items")
+
+    product = relationship(
+        "Product",
+        back_populates="order_items",
+        passive_deletes=True
+    )
 
  
 
