@@ -5,8 +5,7 @@ from werkzeug.security import generate_password_hash
 from models import User
 from extension import db
 
-@click.command("create-admin")
-@with_appcontext
+
 def create_admin():
     admin_email = os.getenv("ADMIN_EMAIL")
     admin_password = os.getenv("ADMIN_PASSWORD")
@@ -31,3 +30,8 @@ def create_admin():
     db.session.add(admin)
     db.session.commit()
     click.echo(f"Admin {admin_email} created successfully!")
+
+@click.command("create-admin")
+@with_appcontext
+def create_admin():
+    create_admin()
