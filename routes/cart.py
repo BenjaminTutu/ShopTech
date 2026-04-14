@@ -29,6 +29,9 @@ def search():
         products=products,
         query=query
     )
+@cart.route('/special')
+def special():
+    return render_template('special.html')
 
 
 

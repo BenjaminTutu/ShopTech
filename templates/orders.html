@@ -45,9 +45,12 @@
         aria-valuemax="100">
         <div class="progress-bar bg-warning" style="width: 50%;">50%</div>
     </div>
-        {% elif i.status == 'Paid' %}
-    <p style="color: white; background-color: #00bf63; border-radius: 20px; padding: 10px; width: 300px; font-weight: bold;">Status: <span>{{ i.status }}</span></p>
-    <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+    {% elif i.status == 'Paid' %}
+    <p
+        style="color: white; background-color: #00bf63; border-radius: 20px; padding: 10px; width: 300px; font-weight: bold;">
+        Status: <span>{{ i.status }}</span></p>
+    <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0"
+        aria-valuemax="100">
         <div class="progress-bar bg-success" style="width: 90%;">90%</div>
     </div>
     {% else %}
@@ -65,8 +68,12 @@
 
     {% for item in i.items %}
     <div class="order-item d-flex align-items-center mb-3">
-        <img src="{{ url_for('static', filename='images/products/' + item.product.image)}}"
+        {% if item.product_image %}
+        <img src="{{ url_for('static', filename='images/products/' + item.product_image)}}"
             alt="{{ item.product.name }}" class="order-img">
+        {% else %}
+        <img src="{{ url_for('static', filename='images/uploads/default.jpg')}}" alt="No Image" class="order-img">
+        {% endif %}
 
 
         <div class="ms-3">
@@ -81,15 +88,38 @@
 
     </div>
     {% endfor %}
-    {% if current_user.role == 'admin' %}
+    {% if current_user.role == 'admin' and i.status != 'Paid' %}
     <a class="btn btn-outline-primary" href="{{ url_for('admins.update_order', order_id=i.id) }}">
         Update Order Status</a>
-    <a class="btn btn-outline-primary" href="{{ url_for('admins.delete_order', order_id=i.id) }}">Delete Order</a>
+    <a style="color: white; background-color: #dc3545; border-color: #dc3545; 
+    padding: 10px 20px; border-radius: 5px; text-decoration: none;"
+        href="{{ url_for('orders.cancel_order', order_id=i.id) }}">Cancel Order</a>
+    <a class="btn btn-outline-primary" href="{{ url_for('orders.pay', order_id=i.id) }}">Make Payment</a>
+    {% elif current_user.role == 'admin' and i.status == 'Paid' %}
+    <a class="btn btn-outline-primary" href="{{ url_for('admins.update_order', order_id=i.id) }}">
+        Update Order Status</a>
     {% else %}
     {% if i.status == 'Pending' %}
     <a class="btn btn-outline-primary" href="{{ url_for('orders.pay', order_id=i.id) }}">Make Payment</a>
     <a style="color: white; background-color: #dc3545; border-color: #dc3545; 
-    padding: 10px 20px; border-radius: 5px; text-decoration: none;" href="{{ url_for('orders.cancel_order', order_id=i.id) }}">Cancel Order</a>
+        padding: 10px 20px; border-radius: 5px; text-decoration: none;"
+        href="{{ url_for('orders.cancel_order', order_id=i.id) }}">Cancel Order</a>
+
+    {% elif i.status == 'Paid' %}
+    <p class="text-muted fst-italic">Payment received. Your order is being processed.</p>
+
+    {% elif i.status == 'Processing' %}
+    <p class="text-muted fst-italic">Your order is currently being processed.</p>
+
+    {% elif i.status == 'Shipped' %}
+    <p class="text-muted fst-italic">Your order is on the way!</p>
+
+    {% elif i.status == 'Delivered' %}
+    <p class="text-muted fst-italic">Your order has been delivered. Thank you for shopping with us!</p>
+
+    {% elif i.status == 'Cancelled' %}
+    <p class="text-muted fst-italic">This order was cancelled.</p>
+
     {% endif %}
     {% endif %}
 </div>

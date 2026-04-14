@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Special Offers{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center;
+    color: #00bf63;
+    margin-top: 20px;
+    font-weight: 600;">Special Offers</h1>
+<p style="color: #00bf63; text-align: center;">Check out our special offers and discounts!</p>
+<hr>
+<div class="special-container">
+    <div class="special">
+        <div class="special-card">
+            <img src="{{ url_for('static', filename='images/uploads/banner-1.png') }}" alt="Offer 1">
+            <div class="offer-info">
+                <span class="discount">30% OFF</span>
+                <button class="btn btn-primary">Purchase</button>
+            </div>
+        </div>
+        <div class="special-card">
+            <img src="{{ url_for('static', filename='images/uploads/banner-2.png') }}" alt="Offer 2">
+            <div class="offer-info">
+                <span class="discount">20% OFF</span>
+                <button class="btn btn-primary">Purchase</button>
+            </div>
+        </div>
+        <div class="special-card">
+            <img src="{{ url_for('static', filename='images/uploads/banner-3.png') }}" alt="Offer 3">
+            <div class="offer-info">
+                <span class="discount">15% OFF</span>
+                <button class="btn btn-primary">Purchase</button>
+            </div>
+        </div>
+        <div class="special-card">
+            <img src="{{ url_for('static', filename='images/uploads/banner-4.png') }}" alt="Offer 4">
+            <div class="offer-info">
+                <span class="discount">15% OFF</span>
+                <button class="btn btn-primary">Purchase</button>
+            </div>
+        </div>
+        <div class="special-card">
+            <img src="{{ url_for('static', filename='images/uploads/banner.png') }}" alt="Offer 5">
+            <div class="offer-info">
+                <span class="discount">15% OFF</span>
+                <button class="btn btn-primary">Purchase</button>
+            </div>
+        </div>
+        <div class="special-card">
+            <img src="{{ url_for('static', filename='images/uploads/banner-5.png') }}" alt="Offer 6">
+            <div class="offer-info">
+                <span class="discount">15% OFF</span>
+                <button class="btn btn-primary">Purchase</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

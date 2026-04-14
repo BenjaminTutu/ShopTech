@@ -7,6 +7,17 @@ from dotenv import load_dotenv
 from extension import db
 from flask_mail import Mail
 
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
+import sqlite3
+
+@event.listens_for(Engine, "connect")
+def enable_sqlite_fk(dbapi_connection, connection_record):
+    if isinstance(dbapi_connection, sqlite3.Connection):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -72,17 +83,8 @@ def inject_cart_count():
 
     return dict(cart_count=count)
 
-# @app.context_processor
-# def inject_order_count():
-#     if current_user.is_authenticated:
-#         order = Order.query.filter_by(user_id=current_user.id).first()
-#         if order and order.items:
-#             count = sum(orders.item)
-#         else:
-#             count = 0
-#     else:
-#         count = 0
-#     return dict(order_count=count)
+from command import create_admin
+app.cli.add_command(create_admin)
 
 
 
