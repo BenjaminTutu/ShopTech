@@ -99,7 +99,7 @@ A full-stack e-commerce web application for buying phones, laptops, and accessor
 
 ```bash
 # Clone the repository
-git clone https://github.com/BenjaminTutu/Flask-Ecommerce-Shop.git
+git clone https://github.com/BenjaminTutu/ShopTech.git
 cd Flask-Ecommerce-Shop
 
 # Create and activate virtual environment
