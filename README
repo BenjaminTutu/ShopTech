@@ -17,32 +17,23 @@ A full-stack e-commerce web application for buying phones, laptops, and accessor
 
 > **Homepage**
 ![Homepage](screenshots/homepage.png)
-![Homepage](screenshots/homepage-1.png)
-
-> **Register Page**
-![Checkout](screenshots/register-page.png)
-
-> **Login Page**
-![Checkout](screenshots/login-page.png)
 
 > **Product Page**
-![Product](screenshots/products.png)
-![Product](screenshots/products-1.png)
-![Product](screenshots/products-2.png)
+![Product](screenshots/product.png)
 
 > **Shopping Cart**
-![Cart](screenshots/cart-page.png)
+![Cart](screenshots/cart.png)
+
+> **Checkout & Payment**
+![Checkout](screenshots/checkout.png)
 
 > **Order Tracking**
 ![Orders](screenshots/orders.png)
 
 > **Admin Panel**
-![Admin](screenshots/admindashboard.png)
+![Admin](screenshots/admin.png)
 
-> **Profile Page**
-![Checkout](screenshots/profile-page.png)
-
-
+---
 
 ## Features
 
@@ -99,7 +90,7 @@ A full-stack e-commerce web application for buying phones, laptops, and accessor
 
 ```bash
 # Clone the repository
-git clone https://github.com/BenjaminTutu/ShopTech.git
+git clone https://github.com/BenjaminTutu/Flask-Ecommerce-Shop.git
 cd Flask-Ecommerce-Shop
 
 # Create and activate virtual environment
