@@ -87,9 +87,11 @@ from command import create_admin
 app.cli.add_command(create_admin)
 
 with app.app_context():
-    db.create_all()
-    create_admin()
-
+    try:
+        db.create_all()
+        create_admin()
+    except Exception as e:
+        print(f"Startup error: {e}")
 
 
 if __name__ == '__main__':
