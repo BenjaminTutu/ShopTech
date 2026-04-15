@@ -84,9 +84,9 @@ def inject_cart_count():
     return dict(cart_count=count)
 
 # create shop admin on start
-# from command import create_admin
-# with app.app_context():
-#     create_admin()
+from command import create_admin
+with app.app_context():
+    create_admin()
 
 
 
