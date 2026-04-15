@@ -83,15 +83,34 @@ def inject_cart_count():
 
     return dict(cart_count=count)
 
-from command import create_admin
-app.cli.add_command(create_admin)
+# from command import create_admin
+# app.cli.add_command(create_admin)
 
-with app.app_context():
-    try:
-        db.create_all()
-        create_admin()
-    except Exception as e:
-        print(f"Startup error: {e}")
+
+@app.route('/setup-admin-<string:token>', methods=['GET'])
+def setup_admin(token):
+    from models import User
+    from werkzeug.security import generate_password_hash
+
+    secret_token = os.getenv("ADMIN_SETUP_TOKEN")
+
+    if token != secret_token:
+        return "Unauthorized", 403
+
+    admin = User.query.filter_by(email=os.getenv("ADMIN_EMAIL")).first()
+    if admin:
+        return "Admin already exists!", 200
+
+    admin = User(
+        name="Admin",
+        email=os.getenv("ADMIN_EMAIL"),
+        phone=os.getenv("ADMIN_PHONE", "0000000000"),
+        password=generate_password_hash(os.getenv("ADMIN_PASSWORD")),
+        role="admin"
+    )
+    db.session.add(admin)
+    db.session.commit()
+    return "Admin created successfully!", 200
 
 
 if __name__ == '__main__':
