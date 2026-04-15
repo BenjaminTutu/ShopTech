@@ -17,21 +17,30 @@ A full-stack e-commerce web application for buying phones, laptops, and accessor
 
 > **Homepage**
 ![Homepage](screenshots/homepage.png)
+> ![Homepage](screenshots/homepage-1.png)
+
+
+> **Register Page**
+![Checkout](screenshots/register-page.png)> 
+> 
+> **Login Page**
+![Checkout](screenshots/login-page.png)
 
 > **Product Page**
-![Product](screenshots/product.png)
+![Product](screenshots/products.png)
+> ![Homepage](screenshots/products-1.png)
+> ![Homepage](screenshots/products-2.png)
 
 > **Shopping Cart**
-![Cart](screenshots/cart.png)
-
-> **Checkout & Payment**
-![Checkout](screenshots/checkout.png)
+![Cart](screenshots/cart-page.png)
 
 > **Order Tracking**
 ![Orders](screenshots/orders.png)
 
 > **Admin Panel**
-![Admin](screenshots/admin.png)
+![Admin](screenshots/admindashboard.png)
+> [Admin](screenshots/admin-customer-details.png)
+> [Admin](screenshots/addshop.png)
 
 ---
 
